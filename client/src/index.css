@@ -1,0 +1,66 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color: theme('colors.ink');
+  background: theme('colors.paper');
+  font-family: "Segoe UI", "Inter", "Helvetica Neue", Arial, sans-serif;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at top left, rgba(56, 189, 248, 0.12), transparent 24rem),
+    radial-gradient(circle at top right, rgba(15, 23, 42, 0.06), transparent 24rem),
+    linear-gradient(180deg, #f7f9fc 0%, #eef3f8 100%);
+}
+
+button,
+input {
+  font: inherit;
+}
+
+@layer components {
+  .app-shell {
+    @apply relative overflow-hidden;
+  }
+
+  .eyebrow-chip {
+    @apply inline-flex rounded-full border border-slate-300 bg-white/80 px-4 py-2 font-mono text-xs uppercase tracking-[0.18em] text-slate-600 shadow-sm backdrop-blur;
+  }
+
+  .hero-title {
+    @apply text-5xl font-semibold uppercase leading-[0.9] tracking-tight text-slate-950 sm:text-6xl lg:text-7xl;
+  }
+
+  .panel-frame {
+    @apply overflow-hidden rounded-[28px] border border-slate-200 bg-white shadow-panel backdrop-blur;
+  }
+
+  .field {
+    @apply h-14 w-full rounded-2xl border border-slate-300 bg-slate-50/70 px-4 text-center text-lg font-medium text-slate-900 outline-none transition focus:border-accent focus:bg-white focus:ring-4 focus:ring-blue-100;
+  }
+
+  .button-primary {
+    @apply inline-flex h-14 items-center justify-center rounded-2xl bg-slate-950 px-5 text-base font-semibold text-white transition hover:bg-slate-800 focus:outline-none focus:ring-4 focus:ring-slate-200 disabled:cursor-not-allowed disabled:bg-slate-400;
+  }
+
+  .button-secondary {
+    @apply inline-flex h-14 items-center justify-center rounded-2xl border border-slate-300 bg-white px-5 text-base font-semibold text-ink transition hover:bg-slate-50 focus:outline-none focus:ring-4 focus:ring-blue-100;
+  }
+
+  .feedback-success {
+    @apply rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm font-medium text-emerald-800;
+  }
+
+  .feedback-error {
+    @apply rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700;
+  }
+
+  .field-label {
+    @apply text-sm font-semibold uppercase tracking-[0.12em] text-slate-500;
+  }
+}
