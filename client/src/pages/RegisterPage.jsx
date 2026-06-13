@@ -22,14 +22,8 @@ export default function RegisterPage() {
   }
 
   function validate() {
-    if (!form.firstName.trim() || !form.lastName.trim()) {
-      return 'First name and last name are required.';
-    }
-
-    if (!STUDENT_ID_REGEX.test(form.studentId)) {
-      return 'Student ID must match YYYY-NNNNN, for example 2023-12345.';
-    }
-
+    if (!form.firstName.trim() || !form.lastName.trim()) return 'Names are required.';
+    if (!STUDENT_ID_REGEX.test(form.studentId)) return 'Must match YYYY-NNNNN.';
     return '';
   }
 
@@ -39,7 +33,6 @@ export default function RegisterPage() {
     setError(validationError);
 
     if (validationError) return;
-
     setIsSubmitting(true);
 
     try {
@@ -58,36 +51,35 @@ export default function RegisterPage() {
 
   return (
     <EventShell
-      badge="Enterprise Event Operations"
-      intro="Create a participant record directly from the front desk when a guest is not yet in the system, then return them to the attendance flow."
-      meta={['On-site registration', 'Validated identity capture', 'Duplicate protection']}
-      title="Participant Registration"
+      badge="Computer Programming Society"
+      intro="Add your profile to the web before checking in."
+      title="CREATE PROFILE"
     >
       <ActionPanel
-        footer="Corporate attendance control"
-        subtitle="New participants are stored immediately and can proceed to login after registration."
-        title="Register a Participant"
+        footer="CPS Seminar • Official Attendance"
+        title="Register Identity"
       >
-        <form className="space-y-5" onSubmit={handleSubmit}>
-          <div className="grid gap-5 sm:grid-cols-2">
-            <div className="space-y-3 text-center">
-              <label className="field-label" htmlFor="firstName">
-                First Name
-              </label>
+        <form className="space-y-6 w-full max-w-5xl mx-auto" onSubmit={handleSubmit}>
+          
+          {/* Feedback messages moved to the top */}
+          <div className="empty:hidden">
+            {error ? <p className="feedback-error">{error}</p> : null}
+          </div>
+
+          <div className="grid gap-6 sm:grid-cols-2">
+            <div className="text-center">
+              <label className="field-label" htmlFor="firstName">First Name</label>
               <input
-                className="field text-left text-base"
+                className="field text-xl"
                 id="firstName"
                 onChange={(event) => updateField('firstName', event.target.value)}
                 value={form.firstName}
               />
             </div>
-
-            <div className="space-y-3 text-center">
-              <label className="field-label" htmlFor="lastName">
-                Last Name
-              </label>
+            <div className="text-center">
+              <label className="field-label" htmlFor="lastName">Last Name</label>
               <input
-                className="field text-left text-base"
+                className="field text-xl"
                 id="lastName"
                 onChange={(event) => updateField('lastName', event.target.value)}
                 value={form.lastName}
@@ -95,12 +87,10 @@ export default function RegisterPage() {
             </div>
           </div>
 
-          <div className="space-y-3 text-center">
-            <label className="field-label" htmlFor="studentId">
-              Student ID
-            </label>
+          <div className="text-center">
+            <label className="field-label" htmlFor="studentId">Student ID Number</label>
             <input
-              className="field"
+              className="field text-3xl tracking-widest"
               id="studentId"
               inputMode="numeric"
               maxLength={10}
@@ -108,18 +98,14 @@ export default function RegisterPage() {
               placeholder="2023-12345"
               value={form.studentId}
             />
-            <p className="text-xs text-slate-500">Format: YYYY-NNNNN</p>
           </div>
 
-          {error ? <p className="feedback-error">{error}</p> : null}
-
-          <div className="grid gap-3 sm:grid-cols-2">
-            <button className="button-primary w-full" disabled={isSubmitting} type="submit">
-              {isSubmitting ? 'Registering...' : 'Register Participant'}
+          <div className="grid gap-4 sm:grid-cols-2 pt-2">
+            <button className="button-primary" disabled={isSubmitting} type="submit">
+              {isSubmitting ? 'Saving...' : 'Save Profile'}
             </button>
-
-            <Link className="button-secondary w-full" to="/login">
-              Back to Login
+            <Link className="button-secondary" to="/login">
+              Cancel
             </Link>
           </div>
         </form>

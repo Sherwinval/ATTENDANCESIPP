@@ -19,7 +19,7 @@ export default function LoginPage() {
     setSuccess('');
 
     if (!STUDENT_ID_REGEX.test(studentId)) {
-      setError('Student ID must match YYYY-NNNNN, for example 2023-12345.');
+      setError('Use YYYY-NNNNN format.');
       return;
     }
 
@@ -34,7 +34,7 @@ export default function LoginPage() {
       }
 
       await logAttendanceLogin(studentId);
-      setSuccess(`Welcome, ${result.participant.fullName}! You are now logged in.`);
+      setSuccess(`Welcome🕷, ${result.participant.fullName}!`);
       setStudentId('');
     } catch (err) {
       setError(err.message);
@@ -45,24 +45,30 @@ export default function LoginPage() {
 
   return (
     <EventShell
-      badge="Enterprise Event Operations"
-      intro="Use the active check-in station to validate participants, record entry instantly, and keep the queue moving with one-step submission."
-      meta={['Live registration desk', 'Secure check-in workflow', 'High-volume processing']}
-      title="Attendance Login"
+      badge="Computer Programming Society"
+      intro="Protecting Your Digital identity in the Next Generation"
+      title="BEHIND THE MASK CYBERSECURITY"
     >
       <ActionPanel
-        footer="Corporate attendance control"
-        subtitle="Enter a valid student ID to record participant arrival."
-        title="Participant Check-In"
+        footer="CPS Seminar • Official Attendance"
+        title="Student Check-In"
+        subtitle="Enter your credentials to swing into the seminar."
       >
-        <form className="space-y-5" onSubmit={handleSubmit}>
-          <div className="space-y-3 text-center">
+        <form className="space-y-8 w-full max-w-4xl mx-auto" onSubmit={handleSubmit}>
+          
+          {/* Feedback messages moved ABOVE the input field */}
+          <div className="empty:hidden">
+            {success ? <p className="feedback-success">{success}</p> : null}
+            {error ? <p className="feedback-error">{error}</p> : null}
+          </div>
+
+          <div className="text-center">
             <label className="field-label" htmlFor="studentId">
-              Student ID
+              Student ID Number
             </label>
             <input
               autoFocus
-              className="field"
+              className="field text-3xl tracking-widest"
               id="studentId"
               inputMode="numeric"
               maxLength={10}
@@ -70,20 +76,16 @@ export default function LoginPage() {
               placeholder="2023-12345"
               value={studentId}
             />
-            <p className="text-xs text-slate-500">Format: YYYY-NNNNN</p>
           </div>
 
-          {success ? <p className="feedback-success">{success}</p> : null}
-          {error ? <p className="feedback-error">{error}</p> : null}
-
-          <button className="button-primary w-full" disabled={isSubmitting} type="submit">
-            {isSubmitting ? 'Recording login...' : 'Record Login'}
+          <button className="button-primary" disabled={isSubmitting} type="submit">
+            {isSubmitting ? 'Scanning...' : 'Access Network'}
           </button>
 
-          <p className="text-center text-sm text-slate-600">
-            New participant?{' '}
-            <Link className="font-semibold text-accent hover:underline" to="/register">
-              Open registration
+          <p className="text-center text-sm font-semibold text-slate-400">
+            Not registered in the database?{' '}
+            <Link className="text-[#ED1D24] hover:text-[#FF007F] transition underline underline-offset-4" to="/register">
+              Create Profile
             </Link>
           </p>
         </form>

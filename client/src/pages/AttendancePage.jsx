@@ -5,9 +5,9 @@ import ActionPanel from '../components/ActionPanel.jsx';
 import EventShell from '../components/EventShell.jsx';
 
 const FILTERS = [
-  { label: 'All activity', value: '' },
-  { label: 'Logins', value: 'login' },
-  { label: 'Logouts', value: 'logout' },
+  { label: 'All Activity', value: '' },
+  { label: 'Check-Ins', value: 'login' },
+  { label: 'Check-Outs', value: 'logout' },
 ];
 
 function formatTimestamp(value) {
@@ -59,25 +59,23 @@ export default function AttendancePage() {
 
   return (
     <EventShell
-      badge="Enterprise Event Operations"
-      intro="Review recorded check-ins and check-outs from a single audit-ready view designed for front desk supervisors and event operations teams."
-      meta={['Central attendance history', 'Timestamped activity log', 'Operational visibility']}
-      panelClassName="mx-auto w-full max-w-6xl"
-      title="Attendance Record"
+      badge="Admin Dashboard"
+      intro="Live network web logs. Monitor footprints for the seminar."
+      panelClassName="mx-auto w-full max-w-[95%] xl:max-w-7xl" /* Table gets maximum width */
+      title="ATTENDANCE LOGS"
     >
       <ActionPanel
-        footer="Corporate attendance control"
-        subtitle="Filter the live log by event type to confirm arrivals, departures, and attendance activity."
-        title="Attendance Activity"
+        footer="CPS Seminar • Official Attendance"
+        title="Network Traffic Feed"
       >
-        <div className="flex flex-wrap justify-center gap-3">
+        <div className="flex flex-wrap justify-center gap-3 mb-4">
           {FILTERS.map((item) => {
             const isActive = item.value === filter;
 
             return (
               <button
                 key={item.label}
-                className={isActive ? 'button-primary px-4 text-sm' : 'button-secondary px-4 text-sm'}
+                className={isActive ? 'button-primary !w-auto px-6 py-2 text-sm h-10' : 'button-secondary !w-auto px-6 py-2 text-sm h-10'}
                 onClick={() => updateFilter(item.value)}
                 type="button"
               >
@@ -87,54 +85,55 @@ export default function AttendancePage() {
           })}
         </div>
 
-        <div className="overflow-hidden rounded-3xl border border-slate-200/80 bg-slate-50/60">
-          <div className="hidden grid-cols-[1.3fr_160px_220px] gap-4 border-b border-slate-200/80 bg-white/80 px-5 py-4 text-sm font-semibold uppercase tracking-[0.08em] text-slate-500 sm:grid">
-            <span>Participant</span>
-            <span>Activity</span>
-            <span>Recorded</span>
+        <div className="overflow-hidden rounded-lg border border-[#0A3D91] bg-black/40 mt-4 shadow-xl">
+          <div className="hidden grid-cols-[1fr_120px_200px] gap-4 border-b border-[#0A3D91] bg-[#0A3D91]/30 px-6 py-4 text-sm font-bold uppercase tracking-widest text-[#8cb8ff] sm:grid" style={{ fontFamily: "'Oswald', sans-serif" }}>
+            <span>Student Identity</span>
+            <span>Status</span>
+            <span>Timestamp</span>
           </div>
 
           {isLoading ? (
-            <div className="px-5 py-10 text-center text-sm text-slate-600">
-              Loading attendance records...
+            <div className="px-6 py-10 text-center text-lg font-bold text-[#ED1D24] animate-pulse">
+              [ Scanning the web... ]
             </div>
           ) : null}
 
           {!isLoading && error ? (
-            <div className="px-5 py-10 text-center text-sm text-red-700">{error}</div>
+            <div className="px-6 py-10 text-center text-lg font-bold text-red-500">{error}</div>
           ) : null}
 
           {!isLoading && !error && records.length === 0 ? (
-            <div className="px-5 py-10 text-center text-sm text-slate-600">
-              No attendance records found for this filter.
+            <div className="px-6 py-10 text-center text-lg font-medium text-slate-400">
+              [ No digital footprints found. ]
             </div>
           ) : null}
 
           {!isLoading && !error && records.length > 0 ? (
-            <div className="divide-y divide-slate-200/80">
+            <div className="divide-y divide-[#0A3D91]/40">
               {records.map((record) => (
                 <div
-                  className="grid gap-3 px-5 py-4 text-sm sm:grid-cols-[1.3fr_160px_220px] sm:gap-4"
+                  className="grid gap-2 px-6 py-4 text-base sm:grid-cols-[1fr_120px_200px] sm:gap-4 hover:bg-[#0A3D91]/20 transition"
                   key={record.id}
                 >
-                  <div>
-                    <p className="font-semibold text-slate-950">
-                      {record.participant?.fullName || 'Unknown participant'}
+                  <div className="flex flex-col justify-center">
+                    <p className="font-bold text-white text-lg truncate">
+                      {record.participant?.fullName || 'Unknown'}
                     </p>
-                    <p className="mt-1 text-slate-600">{record.studentId}</p>
+                    <p className="font-mono text-sm text-red-400 mt-1">{record.studentId}</p>
                   </div>
                   <div className="flex items-center">
                     <span
                       className={
                         record.type === 'login'
-                          ? 'rounded-full bg-emerald-50 px-3 py-1 font-semibold text-emerald-700'
-                          : 'rounded-full bg-amber-50 px-3 py-1 font-semibold text-amber-700'
+                          ? 'text-xs font-bold uppercase tracking-wider text-emerald-400 border-l-4 border-emerald-500 pl-3 py-1'
+                          : 'text-xs font-bold uppercase tracking-wider text-amber-400 border-l-4 border-amber-500 pl-3 py-1'
                       }
+                      style={{ fontFamily: "'Oswald', sans-serif" }}
                     >
-                      {record.type === 'login' ? 'Logged in' : 'Logged out'}
+                      {record.type === 'login' ? 'CHECK IN' : 'CHECK OUT'}
                     </span>
                   </div>
-                  <div className="flex items-center text-slate-600">
+                  <div className="flex items-center font-mono text-sm text-slate-400">
                     {formatTimestamp(record.recordedAt)}
                   </div>
                 </div>
@@ -143,12 +142,11 @@ export default function AttendancePage() {
           ) : null}
         </div>
 
-        <p className="text-center text-sm text-slate-600">
-          Missing someone from the list?{' '}
-          <Link className="font-semibold text-accent hover:underline" to="/register">
-            Register the participant
+        <p className="text-center text-base font-medium text-slate-400 mt-6">
+          Missing identity?{' '}
+          <Link className="text-[#ED1D24] hover:text-[#FF007F] font-bold transition underline underline-offset-4" to="/register">
+            Register profile
           </Link>
-          .
         </p>
       </ActionPanel>
     </EventShell>
