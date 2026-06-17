@@ -12,10 +12,12 @@ const app = express();
 const port = process.env.PORT || 5000;
 const mongoUri = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/attendance-system';
 const clientOrigin = process.env.CLIENT_ORIGIN || 'http://localhost:5173';
+const mongoReconnectDelayMs = Number(process.env.MONGODB_RECONNECT_DELAY_MS || 5000);
 const mongoDnsServers = process.env.MONGODB_DNS_SERVERS
   ?.split(',')
   .map((server) => server.trim())
   .filter(Boolean);
+let mongoReconnectTimer = null;
 
 function ensureDatabaseConnection(req, res, next) {
   if (mongoose.connection.readyState !== 1) {
@@ -72,19 +74,32 @@ configureMongoDns(mongoUri);
 mongoose.set('strictQuery', true);
 mongoose.connection.on('disconnected', () => {
   console.error('MongoDB disconnected.');
+  scheduleMongoReconnect();
 });
 mongoose.connection.on('error', (error) => {
   console.error('MongoDB runtime error:', error.message);
 });
 
-mongoose
-  .connect(mongoUri, { serverSelectionTimeoutMS: 5000 })
-  .then(() => {
-    app.listen(port, () => {
-      console.log(`Server running on http://localhost:${port}`);
-    });
-  })
-  .catch((error) => {
+function scheduleMongoReconnect() {
+  if (mongoReconnectTimer || mongoose.connection.readyState === 1 || mongoose.connection.readyState === 2) {
+    return;
+  }
+
+  mongoReconnectTimer = setTimeout(() => {
+    mongoReconnectTimer = null;
+    void connectToMongo();
+  }, mongoReconnectDelayMs);
+}
+
+async function connectToMongo() {
+  if (mongoose.connection.readyState === 1 || mongoose.connection.readyState === 2) {
+    return;
+  }
+
+  try {
+    await mongoose.connect(mongoUri, { serverSelectionTimeoutMS: 5000 });
+    console.log('MongoDB connected.');
+  } catch (error) {
     if (error.message.includes('querySrv')) {
       console.error(
         'MongoDB SRV lookup failed. Atlas IP allowlisting is not the problem here; the machine DNS resolver could not resolve the SRV record.'
@@ -93,6 +108,14 @@ mongoose
         'If this still fails, try setting MONGODB_DNS_SERVERS=8.8.8.8,1.1.1.1 in server/.env or switch to a direct non-SRV Atlas connection string from MongoDB Atlas.'
       );
     }
+
     console.error('MongoDB connection failed:', error.message);
-    process.exit(1);
-  });
+    scheduleMongoReconnect();
+  }
+}
+
+app.listen(port, () => {
+  console.log(`Server running on http://localhost:${port}`);
+});
+
+void connectToMongo();
