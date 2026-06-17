@@ -6,12 +6,15 @@ import EventShell from '../components/EventShell.jsx';
 
 const STUDENT_ID_REGEX = /^\d{4}-\d{5}$/;
 
-function formatStudentIdInput(value) {
+function formatStudentIdInput(value, previousValue = '') {
   const cleaned = value.replace(/[^\d-]/g, '');
   const digits = cleaned.replace(/-/g, '');
 
   if (digits.length <= 4) {
-    if (cleaned.length > 4 && cleaned[4] === '-') {
+    if (
+      digits.length === 4 &&
+      (value.length > previousValue.length || (cleaned.length > 4 && cleaned[4] === '-'))
+    ) {
       return `${digits}-`;
     }
 
@@ -86,7 +89,9 @@ export default function LogoutPage() {
               id="studentId"
               inputMode="numeric"
               maxLength={10}
-              onChange={(event) => setStudentId(formatStudentIdInput(event.target.value))}
+              onChange={(event) =>
+                setStudentId((currentValue) => formatStudentIdInput(event.target.value, currentValue))
+              }
               placeholder="2023-12345"
               value={studentId}
             />
