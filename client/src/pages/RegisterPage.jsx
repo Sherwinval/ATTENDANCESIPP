@@ -95,7 +95,7 @@ export default function RegisterPage() {
               inputMode="numeric"
               maxLength={10}
               onChange={(event) => updateField('studentId', event.target.value)}
-              placeholder="2023-12345"
+              placeholder="YYYY-NNNNN"
               value={form.studentId}
             />
           </div>

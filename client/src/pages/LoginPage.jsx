@@ -47,7 +47,7 @@ export default function LoginPage() {
       const result = await checkParticipant(studentId);
 
       if (!result.exists) {
-        navigate('/register', { state: { studentId } });
+        setError('Invalid Student ID!');
         return;
       }
 
@@ -93,7 +93,7 @@ export default function LoginPage() {
               onChange={(event) =>
                 setStudentId((currentValue) => formatStudentIdInput(event.target.value, currentValue))
               }
-              placeholder="2023-12345"
+              placeholder="YYYY-NNNNN"
               value={studentId}
             />
           </div>

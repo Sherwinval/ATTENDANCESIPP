@@ -46,7 +46,7 @@ export default function LogoutPage() {
       const result = await checkParticipant(studentId);
 
       if (!result.exists) {
-        setError('ID not on the web. Register first.');
+        setError('Invalid Student ID!');
         return;
       }
 
@@ -92,7 +92,7 @@ export default function LogoutPage() {
               onChange={(event) =>
                 setStudentId((currentValue) => formatStudentIdInput(event.target.value, currentValue))
               }
-              placeholder="2023-12345"
+              placeholder="YYYY-NNNNN"
               value={studentId}
             />
           </div>
