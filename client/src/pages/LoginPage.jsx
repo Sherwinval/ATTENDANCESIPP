@@ -50,7 +50,7 @@ export default function LoginPage() {
       title="BEHIND THE MASK CYBERSECURITY"
     >
       <ActionPanel
-        footer="CPS Seminar • Official Attendance"
+        footer="With Great Data Comes Great Responsibility"
         title="Student Check-In"
         subtitle="Enter your credentials to swing into the seminar."
       >

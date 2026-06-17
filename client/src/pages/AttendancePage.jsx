@@ -65,7 +65,7 @@ export default function AttendancePage() {
       title="ATTENDANCE LOGS"
     >
       <ActionPanel
-        footer="CPS Seminar • Official Attendance"
+        footer="With Great Data Comes Great Responsibility"
         title="Network Traffic Feed"
       >
         <div className="flex flex-wrap justify-center gap-3 mb-4">

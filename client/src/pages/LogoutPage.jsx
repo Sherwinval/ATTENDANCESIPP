@@ -49,7 +49,7 @@ export default function LogoutPage() {
       title="SYSTEM CHECK-OUT"
     >
       <ActionPanel
-        footer="CPS Seminar • Official Attendance"
+        footer="With Great Data Comes Great Responsibility"
         title="Network Departure"
         subtitle="Confirm your departure to finalize the log."
       >

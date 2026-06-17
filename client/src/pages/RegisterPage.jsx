@@ -56,7 +56,7 @@ export default function RegisterPage() {
       title="CREATE PROFILE"
     >
       <ActionPanel
-        footer="CPS Seminar • Official Attendance"
+        footer="With Great Data Comes Great Responsibility"
         title="Register Identity"
       >
         <form className="space-y-6 w-full max-w-5xl mx-auto" onSubmit={handleSubmit}>
