@@ -21,6 +21,30 @@ async function recordAttendance(req, res, next, type) {
       return res.status(404).json({ message: 'Participant not found.' });
     }
 
+    const lastAttendance = await Attendance.findOne({ participant: participant._id })
+      .sort({ recordedAt: -1, createdAt: -1 })
+      .lean();
+
+    if (type === 'login' && lastAttendance?.type === 'login') {
+      return res.status(409).json({
+        message: 'Student is already logged in. Please log out before logging in again.',
+      });
+    }
+
+    if (type === 'logout') {
+      if (!lastAttendance) {
+        return res.status(409).json({
+          message: 'Student has no active login session to log out from.',
+        });
+      }
+
+      if (lastAttendance.type === 'logout') {
+        return res.status(409).json({
+          message: 'Student is already logged out. Please log in before logging out again.',
+        });
+      }
+    }
+
     const attendance = await Attendance.create({
       participant: participant._id,
       studentId,
