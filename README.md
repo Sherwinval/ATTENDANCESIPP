@@ -1,55 +1,34 @@
-ATTENDANCESIPP
+# ATTENDANCESIPP
 
-Full-stack event attendance login/logout system built with Vite, React,
-Tailwind CSS, Express, and MongoDB.
-
-## Project Structure
-
-```text
-client/   Vite + React frontend
-server/   Express + Mongoose backend
-```
+A full-stack attendance system built with Vite, React, Tailwind CSS, Express, and MongoDB.
 
 ## Setup
 
-1. Install frontend dependencies:
+### 1. Frontend
 
 ```bash
 cd client
 npm install
+npm run dev
 ```
 
-2. Install backend dependencies:
-
-```bash
-cd ../server
-npm install
-```
-
-3. Create `server/.env` from `server/env.example` and set `MONGODB_URI`.
-
-4. Start the backend:
+### 2. Backend
 
 ```bash
 cd server
+npm install
+npm install mongodb
 npm run dev
 ```
 
-5. Start the frontend in another terminal:
+### 3. Clear the database
 
 ```bash
-cd client
-npm run dev
+cd server
+node scripts/clear-attendance.js
 ```
 
-The app runs at `http://localhost:5173` and the API runs at
-`http://localhost:5000`.
+## Notes
 
-## API
-
-- `POST /api/check` checks whether a student ID exists.
-- `POST /api/register` registers a participant.
-- `POST /api/login` records a login attendance event.
-- `POST /api/logout` records a logout attendance event.
-
-Student IDs must match `YYYY-NNNNN`, for example `2023-12345`.
+- Start the frontend and backend in separate terminals.
+- Make sure MongoDB is available and configured for the server before running the backend.
